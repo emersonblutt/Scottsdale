@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Golf Tournament Scorer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f0fdf4 0%, #d1fae5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .title-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-grow: 1;
+        }
+
+        h1 {
+            color: #166534;
+            font-size: 32px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .title-input {
+            font-size: 32px;
+            font-weight: 700;
+            color: #166534;
+            border: 2px dashed transparent;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: transparent;
+            min-width: 300px;
+        }
+
+        .title-input:hover {
+            border-color: #bbf7d0;
+        }
+
+        .title-input:focus {
+            outline: none;
+            border-color: #16a34a;
+            background: #f0fdf4;
+        }
+
+        h2 {
+            color: #166534;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #15803d;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .btn:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .login-card {
+            max-width: 500px;
+            margin: 100px auto;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            color: #166534;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #16a34a;
+            box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.1);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            border-bottom: 2px solid #bbf7d0;
+        }
+
+        th {
+            padding: 12px;
+            text-align: left;
+            color: #166534;
+            font-weight: 600;
+        }
+
+        th.center {
+            text-align: center;
+        }
+
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #dcfce7;
+        }
+
+        td.center {
+            text-align: center;
+        }
+
+        tr:hover {
+            background: #f0fdf4;
+        }
+
+        .score-input {
+            width: 90px;
+            padding: 10px 12px;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .score-input:disabled {
+            background: #f3f4f6;
+            cursor: not-allowed;
+        }
+
+        .leaderboard-row-winner {
+            background: #fef9c3;
+        }
+
+        .score-display {
+            font-weight: 600;
+            color: #166534;
+        }
+
+        .score-detail {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .score-original {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .score-adjusted {
+            font-weight: 600;
+            color: #166534;
+        }
+
+        .total-score {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .total-main {
+            font-size: 18px;
+            font-weight: 700;
+            color: #166534;
+        }
+
+        .total-unadj {
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        .rank {
+            font-weight: 700;
+            color: #166534;
+        }
+
+        .trophy {
+            font-size: 20px;
+        }
+
+        .overflow-x {
+            overflow-x: auto;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: 2px solid #bbf7d0;
+            background: white;
+            color: #166534;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: #16a34a;
+            color: white;
+            border-color: #16a34a;
+        }
+
+        .tab-btn:hover {
+            border-color: #16a34a;
+        }
+
+        .error {
+            color: #dc2626;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .success {
+            color: #16a34a;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #166534;
+        }
+
+        .info-banner {
+            background: #dbeafe;
+            border: 2px solid #3b82f6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #1e40af;
+            font-size: 14px;
+        }
+
+        .warning-banner {
+            background: #fef3c7;
+            border: 2px solid #f59e0b;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #92400e;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="app">
+        <div id="loadingScreen" class="loading">
+            <h2>Initializing Firebase...</h2>
+        </div>
+
+        <div id="configScreen" style="display: none;">
+            <div class="card login-card">
+                <h1 style="text-align: center; margin-bottom: 20px;">⚙️ Firebase Setup Required</h1>
+                
+                <div class="warning-banner">
+                    <strong>Setup Instructions:</strong>
+                    <ol style="margin-top: 10px; margin-left: 20px;">
+                        <li>Create a Firebase project at console.firebase.google.com</li>
+                        <li>Enable Firestore Database in test mode</li>
+                        <li>Copy your Firebase config from Project Settings</li>
+                        <li>Paste it in the code where indicated (line 38)</li>
+                    </ol>
+                </div>
+                
+                <p style="color: #dc2626; text-align: center; margin-top: 20px;">
+                    Firebase configuration is missing. Please add your config to the code.
+                </p>
+            </div>
+        </div>
+
+        <div id="loginScreen" style="display: none;">
+            <div class="card login-card">
+                <h1 style="text-align: center; margin-bottom: 20px;">🏆 Golf Tournament Scorer</h1>
+                
+                <div class="info-banner">
+                    <strong>Shared Tournament:</strong> All players see the same scores in real-time!
+                </div>
+
+                <div class="tab-buttons">
+                    <button class="tab-btn active" onclick="showLoginTab()">Login</button>
+                    <button class="tab-btn" onclick="showSignupTab()">Sign Up</button>
+                </div>
+
+                <div id="loginForm">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="loginUsername" placeholder="Enter your username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="loginPassword" placeholder="Enter your password">
+                    </div>
+                    <div id="loginError" class="error"></div>
+                    <button class="btn" onclick="login()" style="width: 100%; justify-content: center; margin-top: 10px;">
+                        Login
+                    </button>
+                </div>
+
+                <div id="signupForm" style="display: none;">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="signupUsername" placeholder="Choose a username">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="signupPassword" placeholder="Choose a password">
+                    </div>
+                    <div class="form-group">
+                        <label>Handicap</label>
+                        <input type="text" id="signupHandicap" placeholder="Enter your handicap (e.g., 12.5)">
+                    </div>
+                    <div id="signupError" class="error"></div>
+                    <div id="signupSuccess" class="success"></div>
+                    <button class="btn" onclick="signup()" style="width: 100%; justify-content: center; margin-top: 10px;">
+                        Create Account
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tournamentScreen" style="display: none;">
+            <div class="card">
+                <div class="header">
+                    <div class="title-section">
+                        <span style="font-size: 32px;">🏆</span>
+                        <input type="text" class="title-input" id="tournamentTitle" 
+                               value="Golf Tournament" placeholder="Tournament Name"
+                               onchange="saveTournamentTitle()">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-badge" id="currentUser"></span>
+                        <button class="btn btn-secondary" onclick="logout()">Logout</button>
+                    </div>
+                </div>
+
+                <div class="overflow-x">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th class="center">Handicap</th>
+                                <th class="center">Day 1</th>
+                                <th class="center">Day 2</th>
+                                <th class="center">Day 3</th>
+                                <th class="center">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="playersTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>Leaderboard - Handicap Adjusted</h2>
+                <div class="overflow-x">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Player</th>
+                                <th class="center">Handicap</th>
+                                <th class="center">Day 1<br><small>(Adjusted)</small></th>
+                                <th class="center">Day 2<br><small>(Adjusted)</small></th>
+                                <th class="center">Day 3<br><small>(Adjusted)</small></th>
+                                <th class="center">Adjusted<br>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboardTable">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // ============================================
+        // PASTE YOUR FIREBASE CONFIG HERE
+        // ============================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTCsjqOlm_iU0iUmNU283VxnS7PNvzDH4",
+            authDomain: "golf-tracker-9fd68.firebaseapp.com",
+            projectId: "golf-tracker-9fd68",
+            storageBucket: "golf-tracker-9fd68.firebasestorage.app",
+            messagingSenderId: "490198192732",
+            appId: "1:490198192732:web:9eaee684c7bab5a9558c99",
+            measurementId: "G-ZE8Y5HV1RQ"
+        };
+        // ============================================
+
+        let db;
+        let currentUser = null;
+        let users = {};
+        let tournamentTitle = 'Golf Tournament';
+        let unsubscribeUsers = null;
+        let unsubscribeTitle = null;
+
+        // Check if Firebase config is valid
+        function isFirebaseConfigured() {
+            return firebaseConfig.apiKey && !firebaseConfig.apiKey.includes('YOUR_');
+        }
+
+        // Initialize Firebase
+        function initFirebase() {
+            if (!isFirebaseConfigured()) {
+                document.getElementById('loadingScreen').style.display = 'none';
+                document.getElementById('configScreen').style.display = 'block';
+                return false;
+            }
+
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                return true;
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                alert('Firebase initialization failed: ' + error.message);
+                return false;
+            }
+        }
+
+        // Real-time listener for all users
+        function setupUsersListener() {
+            if (unsubscribeUsers) unsubscribeUsers();
+            
+            unsubscribeUsers = db.collection('users').onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    const username = change.doc.id;
+                    if (change.type === 'added' || change.type === 'modified') {
+                        users[username] = change.doc.data();
+                    } else if (change.type === 'removed') {
+                        delete users[username];
+                    }
+                });
+                if (document.getElementById('tournamentScreen').style.display !== 'none') {
+                    render();
+                }
+            });
+        }
+
+        // Real-time listener for tournament title
+        function setupTitleListener() {
+            if (unsubscribeTitle) unsubscribeTitle();
+            
+            unsubscribeTitle = db.collection('settings').doc('tournament')
+                .onSnapshot((doc) => {
+                    if (doc.exists) {
+                        tournamentTitle = doc.data().title || 'Golf Tournament';
+                        if (document.getElementById('tournamentTitle')) {
+                            document.getElementById('tournamentTitle').value = tournamentTitle;
+                        }
+                    }
+                });
+        }
+
+        async function saveUser(username, userData) {
+            try {
+                await db.collection('users').doc(username).set(userData);
+            } catch (error) {
+                console.error('Error saving user:', error);
+                alert('Failed to save user data');
+            }
+        }
+
+        async function loadUser(username) {
+            try {
+                const doc = await db.collection('users').doc(username).get();
+                return doc.exists ? doc.data() : null;
+            } catch (error) {
+                console.error('Error loading user:', error);
+                return null;
+            }
+        }
+
+        async function saveTournamentTitle() {
+            const title = document.getElementById('tournamentTitle').value;
+            tournamentTitle = title;
+            try {
+                await db.collection('settings').doc('tournament').set({ title: title });
+            } catch (error) {
+                console.error('Error saving title:', error);
+            }
+        }
+
+        async function initializeData() {
+            if (!initFirebase()) return;
+
+            try {
+                // Set up real-time listeners
+                setupUsersListener();
+                setupTitleListener();
+
+                // Load initial data
+                const usersSnapshot = await db.collection('users').get();
+                usersSnapshot.forEach((doc) => {
+                    users[doc.id] = doc.data();
+                });
+
+                const titleDoc = await db.collection('settings').doc('tournament').get();
+                if (titleDoc.exists) {
+                    tournamentTitle = titleDoc.data().title || 'Golf Tournament';
+                }
+
+                document.getElementById('loadingScreen').style.display = 'none';
+                showLoginScreen();
+            } catch (error) {
+                console.error('Error initializing data:', error);
+                alert('Failed to load tournament data: ' + error.message);
+            }
+        }
+
+        function showLoginScreen() {
+            document.getElementById('loginScreen').style.display = 'block';
+            document.getElementById('tournamentScreen').style.display = 'none';
+        }
+
+        function showTournamentScreen() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('tournamentScreen').style.display = 'block';
+            document.getElementById('currentUser').textContent = currentUser;
+            document.getElementById('tournamentTitle').value = tournamentTitle;
+            render();
+        }
+
+        function showLoginTab() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs[0].classList.add('active');
+            tabs[1].classList.remove('active');
+            clearMessages();
+        }
+
+        function showSignupTab() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs[0].classList.remove('active');
+            tabs[1].classList.add('active');
+            clearMessages();
+        }
+
+        function clearMessages() {
+            document.getElementById('loginError').textContent = '';
+            document.getElementById('signupError').textContent = '';
+            document.getElementById('signupSuccess').textContent = '';
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+            
+            if (username === '' || password === '') {
+                document.getElementById('loginError').textContent = 'Please enter username and password';
+                return;
+            }
+
+            const userData = await loadUser(username);
+            
+            if (!userData) {
+                document.getElementById('loginError').textContent = 'User not found';
+                return;
+            }
+
+            if (userData.password !== password) {
+                document.getElementById('loginError').textContent = 'Incorrect password';
+                return;
+            }
+
+            currentUser = username;
+            showTournamentScreen();
+        }
+
+        async function signup() {
+            const username = document.getElementById('signupUsername').value.trim();
+            const password = document.getElementById('signupPassword').value;
+            const handicap = document.getElementById('signupHandicap').value.trim();
+            
+            if (username === '' || password === '' || handicap === '') {
+                document.getElementById('signupError').textContent = 'Please fill in all fields';
+                return;
+            }
+
+            const existingUser = await loadUser(username);
+            if (existingUser) {
+                document.getElementById('signupError').textContent = 'Username already exists';
+                return;
+            }
+
+            const handicapNum = parseFloat(handicap);
+            if (isNaN(handicapNum)) {
+                document.getElementById('signupError').textContent = 'Handicap must be a valid number';
+                return;
+            }
+
+            const userData = {
+                password: password,
+                handicap: handicapNum,
+                day1: 0,
+                day2: 0,
+                day3: 0
+            };
+
+            await saveUser(username, userData);
+
+            document.getElementById('signupError').textContent = '';
+            document.getElementById('signupSuccess').textContent = 'Account created! You can now login.';
+            
+            document.getElementById('signupUsername').value = '';
+            document.getElementById('signupPassword').value = '';
+            document.getElementById('signupHandicap').value = '';
+            
+            setTimeout(() => showLoginTab(), 1500);
+        }
+
+        function logout() {
+            currentUser = null;
+            showLoginScreen();
+        }
+
+        async function handleScoreChange(username, day, inputElement) {
+            if (username !== currentUser) return;
+            
+            const value = inputElement.value;
+            const score = parseFloat(value) || 0;
+            
+            users[username][day] = score;
+            await saveUser(username, users[username]);
+        }
+
+        function formatScore(score) {
+            return score > 0 ? '+' + score : String(score);
+        }
+
+        function calculateAdjustedScore(strokesAbovePar, handicap) {
+            return strokesAbovePar - handicap;
+        }
+
+        function calculateTotals(user) {
+            const unadjustedTotal = user.day1 + user.day2 + user.day3;
+            const adjustedDay1 = calculateAdjustedScore(user.day1, user.handicap);
+            const adjustedDay2 = calculateAdjustedScore(user.day2, user.handicap);
+            const adjustedDay3 = calculateAdjustedScore(user.day3, user.handicap);
+            const adjustedTotal = adjustedDay1 + adjustedDay2 + adjustedDay3;
+
+            return {
+                unadjustedTotal,
+                adjustedDay1,
+                adjustedDay2,
+                adjustedDay3,
+                adjustedTotal
+            };
+        }
+
+        function renderPlayersTable() {
+            const tbody = document.getElementById('playersTable');
+            tbody.innerHTML = '';
+
+            for (const username in users) {
+                const user = users[username];
+                const totals = calculateTotals(user);
+                const isCurrentUser = username === currentUser;
+                const row = document.createElement('tr');
+                
+                const nameCell = document.createElement('td');
+                const nameStrong = document.createElement('strong');
+                nameStrong.textContent = username;
+                nameCell.appendChild(nameStrong);
+                row.appendChild(nameCell);
+                
+                const handicapCell = document.createElement('td');
+                handicapCell.className = 'center';
+                handicapCell.textContent = String(user.handicap);
+                row.appendChild(handicapCell);
+                
+                ['day1', 'day2', 'day3'].forEach(day => {
+                    const cell = document.createElement('td');
+                    cell.className = 'center';
+                    const input = document.createElement('input');
+                    input.type = 'text';
+                    input.className = 'score-input';
+                    input.value = user[day] === 0 ? '' : String(user[day]);
+                    input.placeholder = '0';
+                    input.disabled = !isCurrentUser;
+                    input.setAttribute('data-username', username);
+                    input.setAttribute('data-day', day);
+                    input.addEventListener('change', function() {
+                        handleScoreChange(this.getAttribute('data-username'), this.getAttribute('data-day'), this);
+                    });
+                    cell.appendChild(input);
+                    row.appendChild(cell);
+                });
+                
+                const totalCell = document.createElement('td');
+                totalCell.className = 'center score-display';
+                totalCell.textContent = formatScore(totals.unadjustedTotal);
+                row.appendChild(totalCell);
+                
+                tbody.appendChild(row);
+            }
+        }
+
+        function renderLeaderboard() {
+            const leaderboard = Object.keys(users).map(username => {
+                const user = users[username];
+                const totals = calculateTotals(user);
+                return {
+                    username,
+                    handicap: user.handicap,
+                    day1: user.day1,
+                    day2: user.day2,
+                    day3: user.day3,
+                    unadjustedTotal: totals.unadjustedTotal,
+                    adjustedDay1: totals.adjustedDay1,
+                    adjustedDay2: totals.adjustedDay2,
+                    adjustedDay3: totals.adjustedDay3,
+                    adjustedTotal: totals.adjustedTotal
+                };
+            }).sort((a, b) => a.adjustedTotal - b.adjustedTotal);
+
+            const tbody = document.getElementById('leaderboardTable');
+            tbody.innerHTML = '';
+
+            leaderboard.forEach((player, i) => {
+                const row = document.createElement('tr');
+                if (i === 0) row.className = 'leaderboard-row-winner';
+                
+                const rankCell = document.createElement('td');
+                rankCell.className = 'rank';
+                rankCell.textContent = i === 0 ? '🏆' : String(i + 1);
+                row.appendChild(rankCell);
+                
+                const nameCell = document.createElement('td');
+                const nameStrong = document.createElement('strong');
+                nameStrong.textContent = player.username;
+                nameCell.appendChild(nameStrong);
+                row.appendChild(nameCell);
+                
+                const handicapCell = document.createElement('td');
+                handicapCell.className = 'center';
+                handicapCell.textContent = String(player.handicap);
+                row.appendChild(handicapCell);
+                
+                ['day1', 'day2', 'day3'].forEach(day => {
+                    const cell = document.createElement('td');
+                    cell.className = 'center';
+                    const detail = document.createElement('div');
+                    detail.className = 'score-detail';
+                    const orig = document.createElement('div');
+                    orig.className = 'score-original';
+                    orig.textContent = formatScore(player[day]);
+                    const adj = document.createElement('div');
+                    adj.className = 'score-adjusted';
+                    adj.textContent = formatScore(player['adjusted' + day.charAt(0).toUpperCase() + day.slice(1)]);
+                    detail.appendChild(orig);
+                    detail.appendChild(adj);
+                    cell.appendChild(detail);
+                    row.appendChild(cell);
+                });
+                
+                const totalCell = document.createElement('td');
+                totalCell.className = 'center';
+                const totalScore = document.createElement('div');
+                totalScore.className = 'total-score';
+                const totalMain = document.createElement('div');
+                totalMain.className = 'total-main';
+                totalMain.textContent = formatScore(player.adjustedTotal);
+                const totalUnadj = document.createElement('div');
+                totalUnadj.className = 'total-unadj';
+                totalUnadj.textContent = '(Unadj: ' + formatScore(player.unadjustedTotal) + ')';
+                totalScore.appendChild(totalMain);
+                totalScore.appendChild(totalUnadj);
+                totalCell.appendChild(totalScore);
+                row.appendChild(totalCell);
+                
+                tbody.appendChild(row);
+            });
+        }
+
+        function render() {
+            renderPlayersTable();
+            renderLeaderboard();
+        }
+
+        // Start the app
+        initializeData();
+    </script>
+</body>
+</html>
